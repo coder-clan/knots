@@ -2,7 +2,7 @@
 
 The Knots is an <a href="https://en.wikipedia.org/wiki/Idempotence">Idempotence</a> component for the Java Spring Boot
 framework. It is named Knots since ancient people use knotted string to record. (Inca people
-use <a href="https://en.wikipedia.org/wiki/Quipu">Quipu</a>, which is a kind of knotted strings, to keep records.
+use <a href="https://en.wikipedia.org/wiki/Quipu">Quipu</a>, which is a kind of knotted strings, to keep records.)
 
 Knots does the following to implement Idempotence:
 
@@ -16,6 +16,17 @@ Knots does the following to implement Idempotence:
   return the persisted return value.
 
 ## Design
+
+- <code>org.coderclan.knots.IdempotentAspect</code> intercepts all methods annotated with @Idempotent.
+- <code>org.coderclan.knots.IdempotentIdFetcher</code> is used by <code>IdempotentAspect</code> to get the Idempotent
+  ID.
+- <code>org.coderclan.knots.IdempotentHandler</code> is used by <code>IdempotentAspect</code>  to handle idempotence, to
+  check if the Method is invoked before( by obtain a Lock of the Idempotent ID), to get the previous invocation result,
+  or to save the invocation result.
+- <code>org.coderclan.knots.ResultChecker</code> is used by <code>IdempotentAspect</code> to check if the invocation is
+  successful.
+- <code>org.coderclan.knots.Serializer</code> is used by <code>IdempotentHandler</code> to serialize or deserialize the
+  invocation result. (invocation result needed to be serialized to be saved into database)
 
 ## How to use
 
@@ -37,3 +48,9 @@ The module knots-demo demonstrate how to use the Knots.
   org.coderclan.knots.demo.TestService.increaseRewardPoint()</code>
 
 ## Configuration
+
+Configuration items are introduced by <code>org.coderclan.knots.KnotsProperties</code>. Please check the source code for
+more details.
+
+Maximum time to wait for previous invocation of the same idempotent ID is (<code>KnotsProperties.retries</code> * <code>
+KnotsProperties.retryWait</code>) milli-seconds. the default value is 10 seconds.

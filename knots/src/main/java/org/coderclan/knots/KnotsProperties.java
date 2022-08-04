@@ -12,11 +12,11 @@ public class KnotsProperties {
     /**
      * Times of retrying to get previous invocation result. Default: 50.
      */
-    public int retries = 50;
+    private int retries = 50;
     /**
      * Pause (unit: millisecond) to wait between retrying. Default: 200ms.
      */
-    public int retryWait = 200;
+    private int retryWait = 200;
 
     public int getRetries() {
         return retries;
